@@ -2,8 +2,14 @@ package com.innobyteservices.quizzy.api.dto.request;
 
 import com.innobyteservices.quizzy.api.enums.AccessRole;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class SignUpRequest {
     private String firstname;
     private String lastname;
