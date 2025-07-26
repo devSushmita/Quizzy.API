@@ -6,8 +6,8 @@ import com.innobyteservices.quizzy.api.dto.response.LoginResponse;
 import com.innobyteservices.quizzy.api.dto.response.SignUpResponse;
 import com.innobyteservices.quizzy.api.exceptions.*;
 import com.innobyteservices.quizzy.api.services.interfaces.IAuthService;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.AddressException;
 
 public class AuthService implements IAuthService {
 
@@ -16,24 +16,32 @@ public class AuthService implements IAuthService {
         if (request == null) {
             throw new InvalidRequestException();
         }
+
         if (request.getFirstname() == null || request.getFirstname().isBlank()) {
             throw new FirstNameRequiredException();
         }
+
         if (request.getLastname() == null || request.getLastname().isBlank()) { 
             throw new LastNameRequiredException();
-        } 
+        }
+
         if (request.getEmail() == null || request.getEmail().isBlank()) {   
             throw new EmailRequiredException();
         }
-        if (!isValidEmail(request.) {
+
+        if (!isValidEmail(request.getEmail())) {
             throw new InvalidEmailException();
         }
+
         if (request.getPassword() == null || request.getPassword().isBlank()) {
             throw new PasswordRequiredException();
         }
+
         if (!isStrongPassword(request.getPassword())) {
             throw new StrongPasswordRequiredException();
         }
+
+        return null;
     }
 
     @Override
@@ -41,18 +49,22 @@ public class AuthService implements IAuthService {
         if (request == null) {
             throw new UnsupportedOperationException("Unimplemented method 'signUp'");
         }
+
         if (request.getEmail() == null || request.getEmail().isBlank()) {
-
+            throw new EmailRequiredException();
         }
+
         if (request.getPassword() == null || request.getPassword().isBlank()) {
-
+            throw new PasswordRequiredException();
         }
+
+        return null;
     }
 
     private static boolean isValidEmail(String email) {
         try {
-            InternetAddress emailAddr = new InternetAddress(email);
-            emailAddr.validate();
+            InternetAddress emailAddress = new InternetAddress(email);
+            emailAddress.validate();
             return true;
         } catch (AddressException ex) {
             return false;
