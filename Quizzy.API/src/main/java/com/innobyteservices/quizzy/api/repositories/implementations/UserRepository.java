@@ -3,7 +3,7 @@ package com.innobyteservices.quizzy.api.repositories.implementations;
 import com.innobyteservices.quizzy.api.internals.UserFilter;
 import com.innobyteservices.quizzy.api.internals.StoredProcedureRequest;
 import com.innobyteservices.quizzy.api.internals.StoredProcedureResult;
-import com.innobyteservices.quizzy.api.models.User;
+import com.innobyteservices.quizzy.api.entities.User;
 import com.innobyteservices.quizzy.api.repositories.interfaces.IBaseRepository;
 import com.innobyteservices.quizzy.api.repositories.interfaces.IUserRepository;
 import org.modelmapper.ModelMapper;
@@ -40,9 +40,6 @@ public class UserRepository implements IUserRepository {
      */
     @Override
     public Optional<Integer> create(User user) {
-        StoredProcedureRequest request = new StoredProcedureRequest();
-        request.setName("usp_register_user");
-
         Map<String, Object> inParams = new HashMap<>();
         inParams.put("p_firstname", user.getFirstname());
         inParams.put("p_lastname", user.getLastname());
@@ -53,6 +50,8 @@ public class UserRepository implements IUserRepository {
         ArrayList<String> outParams = new ArrayList<>();
         outParams.add("p_user_id");
 
+        StoredProcedureRequest request = new StoredProcedureRequest();
+        request.setName("usp_register_user");
         request.setInParameters(inParams);
         request.setOutParameters(outParams);
         StoredProcedureResult result = _base.execute(request);
@@ -75,13 +74,13 @@ public class UserRepository implements IUserRepository {
      */
     @Override
     public Optional<User> get(UserFilter filter) {
+        Map<String, Object> inParams = new HashMap<>();
+        inParams.put("p_id", filter.getId().isPresent() ? filter.getId() : null);
+        inParams.put("p_email", filter.getEmail().isPresent() ? filter.getEmail() : null);
+
         StoredProcedureRequest request = new StoredProcedureRequest();
         request.setName("usp_get_user");
-
-        Map<String, Object> inParams = new HashMap<>();
-        inParams.put("p_id", filter.getId());
-        inParams.put("p_email", filter.getEmail());
-
+        request.setInParameters(inParams);
         StoredProcedureResult result = _base.execute(request);
         List<List<Object>> resultSets = result.getResultSets();
 

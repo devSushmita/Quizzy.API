@@ -1,7 +1,7 @@
 package com.innobyteservices.quizzy.api.repositories.interfaces;
 
 import com.innobyteservices.quizzy.api.internals.UserFilter;
-import com.innobyteservices.quizzy.api.models.User;
+import com.innobyteservices.quizzy.api.entities.User;
 
 import java.util.Optional;
 

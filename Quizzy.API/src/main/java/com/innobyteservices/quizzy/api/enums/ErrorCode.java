@@ -40,7 +40,15 @@ public enum ErrorCode {
     /**
      * Error indicating that the password does not meet the strength requirements.
      */
-    STRONG_PASSWORD_REQUIRED(1105);
+    STRONG_PASSWORD_REQUIRED(1105),
+
+    SIGN_UP_FAILED(1106),
+
+    USER_ALREADY_EXISTS(1107),
+
+    USER_LOGIN_FAILED(1108),
+
+    CLAIM_NOT_FOUND(1109);
 
     /**
      * Numeric representation of the error code.

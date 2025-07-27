@@ -70,7 +70,7 @@ public class BaseRepository implements IBaseRepository {
         Map<String, Object> outValues = new HashMap<>();
 
         if (request.getOutParameters() != null) {
-            for (String paramName : request.getOutParameters().keySet()) {
+            for (String paramName : request.getOutParameters()) {
                 outValues.put(paramName, query.getOutputParameterValue(paramName));
             }
         }
