@@ -1,6 +1,7 @@
 package com.innobyteservices.quizzy.api.validators;
 
 import com.innobyteservices.quizzy.api.annotations.StrongPassword;
+import com.innobyteservices.quizzy.api.enums.ErrorCode;
 import com.innobyteservices.quizzy.api.exceptions.StrongPasswordRequiredException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -14,11 +15,11 @@ public class StrongPasswordValidator implements ConstraintValidator<StrongPasswo
      * Checks if the given password is strong.
      *
      * @param password the password to validate
-     * @param constraintValidatorContext validation context
+     * @param context validation context
      * @return true if strong; throws {@link StrongPasswordRequiredException} if not
      */
     @Override
-    public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(String password, ConstraintValidatorContext context) {
         if (password == null || password.length() < 8) {
             return false;
         }
@@ -39,7 +40,10 @@ public class StrongPasswordValidator implements ConstraintValidator<StrongPasswo
         if (isStrongPassword) {
             return true;
         } else {
-            throw new StrongPasswordRequiredException();
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(String.valueOf(ErrorCode.STRONG_PASSWORD_REQUIRED.getCode()))
+                    .addConstraintViolation();
+            return false;
         }
     }
 }

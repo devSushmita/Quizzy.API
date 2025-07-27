@@ -31,22 +31,34 @@ public class RequiredValidator implements ConstraintValidator<Required, Object> 
      * Checks if the given value is non-blank.
      *
      * @param value the value to validate
-     * @param constraintValidatorContext validation context
+     * @param context validation context
      * @return true if valid; throws {@link FieldRequiredException} if not
      */
     @Override
-    public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
         if (value instanceof String str && str.isBlank()) {
+            context.disableDefaultConstraintViolation();
+            String message = null;
+
             switch (_field.toLowerCase()) {
                 case "firstname":
-                    throw new FieldRequiredException(ErrorMessage.ERR_FIRSTNAME_REQUIRED, ErrorCode.FIRSTNAME_REQUIRED);
+                    message = String.valueOf(ErrorCode.FIRSTNAME_REQUIRED.getCode());
+                    break;
                 case "lastname":
-                    throw new FieldRequiredException(ErrorMessage.ERR_LASTNAME_REQUIRED, ErrorCode.LASTNAME_REQUIRED);
+                    message = String.valueOf(ErrorCode.LASTNAME_REQUIRED.getCode());
+                    break;
                 case "email":
-                    throw new FieldRequiredException(ErrorMessage.ERR_EMAIL_REQUIRED, ErrorCode.EMAIL_REQUIRED);
+                    message = String.valueOf(ErrorCode.EMAIL_REQUIRED.getCode());
+                    break;
                 case "password":
-                    throw new FieldRequiredException(ErrorMessage.ERR_PASSWORD_REQUIRED, ErrorCode.PASSWORD_REQUIRED);
+                    message = String.valueOf(ErrorCode.PASSWORD_REQUIRED.getCode());
+                    break;
             }
+
+            context.buildConstraintViolationWithTemplate(message)
+                    .addConstraintViolation();
+
+            return false;
         }
 
         return true;

@@ -15,23 +15,26 @@ package com.innobyteservices.quizzy.api.constants;
  */
 public abstract class ErrorMessage {
 
+    /** Error message for unexpected internal server failures. */
+    public static final String ERR_INTERNAL_SERVER = "Something went wrong. Please try again later.";
+
     /** Error message for an invalid or missing request body. */
     public static final String ERR_INVALID_REQUEST = "Request body is either not given or invalid.";
 
     /** Error message when the first name is missing during sign-up. */
-    public static final String ERR_FIRSTNAME_REQUIRED = "Firstname is required for the sign-up.";
+    public static final String ERR_FIRSTNAME_REQUIRED = "Firstname is required.";
 
     /** Error message when the last name is missing during sign-up. */
-    public static final String ERR_LASTNAME_REQUIRED = "Lastname is required for the sign-up.";
+    public static final String ERR_LASTNAME_REQUIRED = "Lastname is required.";
 
     /** Error message when the email is missing during sign-up. */
-    public static final String ERR_EMAIL_REQUIRED = "Email is required for the sign-up";
+    public static final String ERR_EMAIL_REQUIRED = "Email is required.";
 
     /** Error message when the email format is invalid or not found. */
     public static final String ERR_INVALID_EMAIL = "Given email format is invalid or not found.";
 
     /** Error message when the password is missing during sign-up. */
-    public static final String ERR_PASSWORD_REQUIRED = "Password is required for the sign-up.";
+    public static final String ERR_PASSWORD_REQUIRED = "Password is required.";
 
     /** Error message when the password does not meet strength requirements. */
     public static final String ERR_STRONG_PASSWORD = "Given password is not a strong password.";

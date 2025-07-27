@@ -6,6 +6,7 @@ import com.innobyteservices.quizzy.api.dto.response.APIResponse;
 import com.innobyteservices.quizzy.api.dto.response.LoginResponse;
 import com.innobyteservices.quizzy.api.dto.response.SignUpResponse;
 import com.innobyteservices.quizzy.api.services.interfaces.IAuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class AuthController {
      * @return success message
      */
     @PostMapping("/signup")
-    public ResponseEntity<APIResponse<SignUpResponse>> signup(@RequestBody SignUpRequest request) {
+    public ResponseEntity<APIResponse<SignUpResponse>> signup(@Valid @RequestBody SignUpRequest request) {
         SignUpResponse data = _service.signup(request);
         APIResponse<SignUpResponse> apiResponse = new APIResponse<>();
         apiResponse.setData(data);
@@ -40,7 +41,7 @@ public class AuthController {
      * @return JWT and user details
      */
     @PostMapping("/login")
-    public ResponseEntity<APIResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<APIResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse data = _service.login(request);
         APIResponse<LoginResponse> apiResponse = new APIResponse<>();
         apiResponse.setData(data);

@@ -1,11 +1,18 @@
 package com.innobyteservices.quizzy.api.enums;
 
+import java.util.Optional;
+
 /**
  * Enum representing various error codes used in the Quizzy API.
  *
  * Each constant corresponds to a specific validation or request error.
  */
 public enum ErrorCode {
+
+    /**
+     * Generic error for internal server error.
+     */
+    INTERNAL_SERVER_ERROR(500),
 
     /**
      * Generic error indicating the request is invalid.
