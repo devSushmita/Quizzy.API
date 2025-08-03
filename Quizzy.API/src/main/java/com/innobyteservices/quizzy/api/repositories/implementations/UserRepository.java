@@ -1,5 +1,6 @@
 package com.innobyteservices.quizzy.api.repositories.implementations;
 
+import com.innobyteservices.quizzy.api.enums.AccessRole;
 import com.innobyteservices.quizzy.api.internals.UserFilter;
 import com.innobyteservices.quizzy.api.internals.StoredProcedureRequest;
 import com.innobyteservices.quizzy.api.internals.StoredProcedureResult;
@@ -9,6 +10,7 @@ import com.innobyteservices.quizzy.api.repositories.interfaces.IUserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -39,33 +41,42 @@ public class UserRepository implements IUserRepository {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Integer> create(User user) {
-        Map<String, Object> inParams = new HashMap<>();
-        inParams.put("p_firstname", user.getFirstname());
-        inParams.put("p_lastname", user.getLastname());
-        inParams.put("p_email", user.getEmail());
-        inParams.put("p_password", user.getPassword());
-        inParams.put("p_role_id", user.getRole().getValue());
+    public Integer create(User user) {
+        List<Map.Entry<String, Object>> inParams = new ArrayList<>();
+        inParams.add(new AbstractMap.SimpleEntry<>("p_firstname", user.getFirstname()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_lastname", user.getLastname()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_role_id", user.getRole().getValue()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_email", user.getEmail()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_password", user.getPassword()));
 
         ArrayList<String> outParams = new ArrayList<>();
         outParams.add("p_user_id");
+
+        Map<String, Class<?>> parameterTypes = new HashMap<>();
+        parameterTypes.put("p_firstname", String.class);
+        parameterTypes.put("p_lastname", String.class);
+        parameterTypes.put("p_role_id", Integer.class);
+        parameterTypes.put("p_email", String.class);
+        parameterTypes.put("p_password", String.class);
+        parameterTypes.put("p_user_id", Integer.class);
 
         StoredProcedureRequest request = new StoredProcedureRequest();
         request.setName("usp_register_user");
         request.setInParameters(inParams);
         request.setOutParameters(outParams);
+        request.setParameterTypes(parameterTypes);
         StoredProcedureResult result = _base.execute(request);
 
         Map<String, Object> output = result.getOutParameters();
         if (output.containsKey("p_user_id")) {
             Object userId = output.get("p_user_id");
             if (userId instanceof Number) {
-                return Optional.of(((Number) userId).intValue());
+                return ((Number) userId).intValue();
             } else {
-                return Optional.empty();
+                return null;
             }
         } else {
-            return Optional.empty();
+            return null;
         }
     }
 
@@ -73,14 +84,19 @@ public class UserRepository implements IUserRepository {
      * {@inheritDoc}
      */
     @Override
-    public Optional<User> get(UserFilter filter) {
-        Map<String, Object> inParams = new HashMap<>();
-        inParams.put("p_id", filter.getId().isPresent() ? filter.getId() : null);
-        inParams.put("p_email", filter.getEmail().isPresent() ? filter.getEmail() : null);
+    public User get(UserFilter filter) {
+        List<Map.Entry<String, Object>> inParams = new ArrayList<>();
+        inParams.add(new AbstractMap.SimpleEntry<>("p_id", null));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_email", filter.getEmail() != null ? filter.getEmail() : null));
+
+        Map<String, Class<?>> parameterTypes = new HashMap<>();
+        parameterTypes.put("p_id", Integer.class);
+        parameterTypes.put("p_email", String.class);
 
         StoredProcedureRequest request = new StoredProcedureRequest();
         request.setName("usp_get_user");
         request.setInParameters(inParams);
+        request.setParameterTypes(parameterTypes);
         StoredProcedureResult result = _base.execute(request);
         List<List<Object>> resultSets = result.getResultSets();
 
@@ -88,11 +104,22 @@ public class UserRepository implements IUserRepository {
             !resultSets.isEmpty() &&
             resultSets.getFirst() != null &&
             !resultSets.getFirst().isEmpty()) {
-            Object user = resultSets.getFirst().getFirst();
-            return Optional.of(_mapper.map(user, User.class));
+
+            Object[] row = (Object[]) resultSets.getFirst().getFirst();
+
+            User user = new User();
+            user.setId((Integer) row[0]);
+            user.setFirstname((String) row[1]);
+            user.setLastname((String) row[2]);
+            user.setRole(AccessRole.fromValue((Integer) row[3]));
+            user.setEmail((String) row[4]);
+            user.setPassword((String) row[5]);
+            user.setCreatedAt((Timestamp) row[6]);
+
+            return user;
         }
         else {
-            return Optional.empty();
+            return null;
         }
     }
 }

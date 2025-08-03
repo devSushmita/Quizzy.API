@@ -2,25 +2,20 @@ package com.innobyteservices.quizzy.api.internals;
 
 import lombok.Data;
 
-import java.util.Optional;
-
 /**
- * Filter criteria for querying User entities.
- * <p>
- * This class allows filtering based on optional fields such as user ID and email.
- * When a field is empty, it is excluded from the query.
- * </p>
+ * Filter options for querying users by optional fields like ID or email.
+ * Fields set to null are ignored during filtering.
  */
 @Data
 public class UserFilter {
 
     /**
-     * Optional user ID for filtering.
+     * Filter by user ID (optional).
      */
-    private Optional<Integer> id;
+    private Integer id;
 
     /**
-     * Optional email address for filtering.
+     * Filter by email address (optional).
      */
-    private Optional<String> email;
+    private String email;
 }

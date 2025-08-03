@@ -10,21 +10,30 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for handling user authentication operations.
+ * Provides endpoints for user sign-up and login.
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private final IAuthService _service;
 
+    /**
+     * Creates an instance of AuthController with the given auth service.
+     *
+     * @param service the authentication service implementation
+     */
     public AuthController(IAuthService service) {
         this._service = service;
     }
 
     /**
-     * Handles user sign-up.
+     * Registers a new user.
      *
-     * @param request sign-up request containing user details
-     * @return success message
+     * @param request the sign-up details
+     * @return API response with registration result
      */
     @PostMapping("/signup")
     public ResponseEntity<APIResponse<SignUpResponse>> signup(@Valid @RequestBody SignUpRequest request) {
@@ -35,10 +44,10 @@ public class AuthController {
     }
 
     /**
-     * Handles user login.
+     * Authenticates a user and returns login details.
      *
-     * @param request login request containing email and password
-     * @return JWT and user details
+     * @param request the login credentials
+     * @return API response with JWT token and user info
      */
     @PostMapping("/login")
     public ResponseEntity<APIResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {

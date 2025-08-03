@@ -40,47 +40,77 @@ public class BaseRepository implements IBaseRepository {
     public StoredProcedureResult execute(StoredProcedureRequest request) {
         StoredProcedureQuery query = _manager.createStoredProcedureQuery(request.getName());
 
-        if (request.getInParameters() != null) {
-            for (Map.Entry<String, Object> param : request.getInParameters().entrySet()) {
-                query.registerStoredProcedureParameter(param.getKey(), param.getValue().getClass(), ParameterMode.IN);
-                query.setParameter(param.getKey(), param.getValue());
+        for (Map.Entry<String, Object> param : request.getInParameters()) {
+            String key = param.getKey();
+            Object value = param.getValue();
+            Class<?> paramType = request.getParameterTypes().get(key);
+
+            if (paramType == null) {
+                throw new IllegalArgumentException("Missing parameter type for IN parameter: " + key);
             }
+
+            query.registerStoredProcedureParameter(key, paramType, ParameterMode.IN);
+            query.setParameter(key, value);
         }
 
-        if (request.getInOutParameters() != null) {
-            for (Map.Entry<String, Object> param : request.getInOutParameters().entrySet()) {
-                query.registerStoredProcedureParameter(param.getKey(), param.getValue().getClass(), ParameterMode.INOUT);
-                query.setParameter(param.getKey(), param.getValue());
+        // Register INOUT parameters
+        for (Map.Entry<String, Object> param : request.getInOutParameters()) {
+            String key = param.getKey();
+            Object value = param.getValue();
+            Class<?> paramType = request.getParameterTypes().get(key);
+
+            if (paramType == null) {
+                throw new IllegalArgumentException("Missing parameter type for INOUT parameter: " + key);
             }
+
+            query.registerStoredProcedureParameter(key, paramType, ParameterMode.INOUT);
+            query.setParameter(key, value);
         }
 
+        // Register OUT parameters
+        for (String paramName : request.getOutParameters()) {
+            Class<?> paramType = request.getParameterTypes().get(paramName);
+
+            if (paramType == null) {
+                throw new IllegalArgumentException("Missing parameter type for OUT parameter: " + paramName);
+            }
+
+            query.registerStoredProcedureParameter(paramName, paramType, ParameterMode.OUT);
+        }
+
+        // Execute the stored procedure
         boolean hasResultSet = query.execute();
 
+        // Collect all result sets
         List<List<Object>> resultSets = new ArrayList<>();
         if (hasResultSet) {
             resultSets.add(query.getResultList());
-            while (query.hasMoreResults()) {
-                List<Object> nextResult = query.getResultList();
-                if (nextResult != null) {
-                    resultSets.add(nextResult);
+
+            try {
+                while (query.hasMoreResults()) {
+                    List<Object> nextResult = query.getResultList();
+                    if (nextResult != null) {
+                        resultSets.add(nextResult);
+                    }
                 }
+            } catch (Exception e) {
+                // Some JPA providers do not support hasMoreResults; ignore or log if needed
             }
         }
 
+        // Collect OUT and INOUT parameter values
         Map<String, Object> outValues = new HashMap<>();
 
-        if (request.getOutParameters() != null) {
-            for (String paramName : request.getOutParameters()) {
-                outValues.put(paramName, query.getOutputParameterValue(paramName));
-            }
+        for (String paramName : request.getOutParameters()) {
+            outValues.put(paramName, query.getOutputParameterValue(paramName));
         }
 
-        if (request.getInOutParameters() != null) {
-            for (String paramName : request.getInOutParameters().keySet()) {
-                outValues.put(paramName, query.getOutputParameterValue(paramName));
-            }
+        for (Map.Entry<String, Object> param : request.getInOutParameters()) {
+            String key = param.getKey();
+            outValues.put(key, query.getOutputParameterValue(key));
         }
 
+        // Build and return result
         StoredProcedureResult result = new StoredProcedureResult();
         result.setResultSets(resultSets);
         result.setOutParameters(outValues);

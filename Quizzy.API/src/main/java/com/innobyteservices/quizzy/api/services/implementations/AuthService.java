@@ -19,8 +19,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
+/**
+ * Service implementation for handling authentication operations.
+ * <p>
+ * Provides functionality for user registration and login,
+ * including password hashing and JWT token generation.
+ */
 @Service
 public class AuthService implements IAuthService {
 
@@ -53,22 +57,27 @@ public class AuthService implements IAuthService {
             throw new InvalidRequestException();
         }
 
-        // Check if the user exists with the same email or not
-        UserFilter filter = _mapper.map(request, UserFilter.class);
-        Optional<User> user = _repository.get(filter);
-        if (user.isPresent()) {
+        UserFilter filter = new UserFilter();
+        filter.setEmail(request.getEmail());
+
+        User user = _repository.get(filter);
+        if (user != null) {
             throw new UserAlreadyExistsException();
         }
 
-        // Create a new user
-        var newUser = _mapper.map(request, User.class);
+        User newUser = new User();
+        String hashedPassword = _passwordHelper.hashPassword(request.getPassword());
+        newUser.setFirstname(request.getFirstname());
+        newUser.setLastname(request.getLastname());
+        newUser.setEmail(request.getEmail());
+        newUser.setPassword(hashedPassword);
         newUser.setRole(AccessRole.User);
-        Optional<Integer> userId = _repository.create(newUser);
+        Integer userId = _repository.create(newUser);
 
         // Check whether user is created or not
-        if (userId.isPresent() && userId.get() != -1) {
+        if (userId != null) {
             SignUpResponse response = new SignUpResponse();
-            response.setId(userId.get());
+            response.setId(userId);
             return response;
         }
         else {
@@ -87,18 +96,18 @@ public class AuthService implements IAuthService {
 
         // Fetch user
         UserFilter filter = _mapper.map(request, UserFilter.class);
-        Optional<User> user = _repository.get(filter);
-        if (user.isPresent()) {
+        User user = _repository.get(filter);
+        if (user != null) {
             // Compare password hash
-            if (!_passwordHelper.verify(request.getPassword(), user.get().getPassword())) {
+            if (!_passwordHelper.verify(request.getPassword(), user.getPassword())) {
                 throw new LoginFailedException();
             }
             else {
                 // Generate access token
                 TokenPayload payload = new TokenPayload();
-                payload.setUserId(user.get().getId());
-                payload.setEmail(user.get().getEmail());
-                payload.setRole(user.get().getRole());
+                payload.setUserId(user.getId());
+                payload.setEmail(user.getEmail());
+                payload.setRole(user.getRole());
                 Token token = _tokenService.generateToken(payload);
 
                 // Create response object

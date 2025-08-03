@@ -4,40 +4,48 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Request model for calling a stored procedure.
+ * Encapsulates the data required to execute a stored procedure.
+ * Includes parameter values, types, and the procedure name.
  */
 @Data
 public class StoredProcedureRequest {
 
     /**
-     * Creates a new instance with empty parameter maps/lists.
+     * Initializes an empty stored procedure request with default parameter collections.
      */
     public StoredProcedureRequest() {
-        inParameters = new HashMap<>();
+        inParameters = new ArrayList<>();
         outParameters = new ArrayList<>();
-        inOutParameters = new HashMap<>();
+        inOutParameters = new ArrayList<>();
+        parameterTypes = new HashMap<>();
     }
 
     /**
-     * Stored procedure name.
+     * The name of the stored procedure to be executed.
      */
     private String name;
 
     /**
-     * IN parameters to pass into the procedure.
+     * List of IN parameters as key-value pairs.
      */
-    private Map<String, Object> inParameters;
+    private List<Map.Entry<String, Object>> inParameters;
 
     /**
-     * OUT parameter names to retrieve after execution.
+     * List of OUT parameter names.
      */
     private ArrayList<String> outParameters;
 
     /**
-     * INOUT parameters passed in and updated by the procedure.
+     * List of INOUT parameters as key-value pairs.
      */
-    private Map<String, Object> inOutParameters;
+    private List<Map.Entry<String, Object>> inOutParameters;
+
+    /**
+     * Map of parameter types, keyed by parameter name.
+     */
+    private Map<String, Class<?>> parameterTypes;
 }

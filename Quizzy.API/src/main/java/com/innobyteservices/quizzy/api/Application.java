@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Bean;
  *
  */
 @SpringBootApplication(exclude = {
-		SecurityAutoConfiguration.class
+	SecurityAutoConfiguration.class
 })
 public class Application {
 
