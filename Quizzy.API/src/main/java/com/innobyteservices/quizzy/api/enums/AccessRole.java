@@ -44,4 +44,20 @@ public enum AccessRole {
     public int getValue() {
         return value;
     }
+
+    /**
+     * Converts an integer value to its corresponding AccessRole.
+     *
+     * @param value the integer value of the role
+     * @return the matching AccessRole
+     * @throws IllegalArgumentException if the value does not match any role
+     */
+    public static AccessRole fromValue(int value) {
+        for (AccessRole role : AccessRole.values()) {
+            if (role.getValue() == value) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Invalid AccessRole value: " + value);
+    }
 }
