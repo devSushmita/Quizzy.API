@@ -8,16 +8,30 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+/**
+ * Implementation of {@link ITopicService} that handles business logic
+ * related to quiz topics.
+ *
+ * <p>Fetches topic entities from the repository and maps them to response DTOs.</p>
+ */
 @Service
 public class TopicService implements ITopicService {
 
     private final ITopicRepository _repository;
 
+    /**
+     * Creates a new {@code TopicService} with the specified topic repository.
+     *
+     * @param repository the repository used to access topic data
+     */
     public TopicService(ITopicRepository repository) {
         _repository = repository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TopicResponse> get() {
         List<Topic> results = _repository.get();
@@ -32,5 +46,4 @@ public class TopicService implements ITopicService {
 
         return responses;
     }
-
 }

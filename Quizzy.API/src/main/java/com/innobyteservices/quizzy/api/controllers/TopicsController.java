@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * REST controller for managing quiz topics.
+ * Controller that handles HTTP requests related to quiz topics.
+ *
+ * <p>
+ * Provides an endpoint to fetch all available quiz topics.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/topics")
@@ -19,17 +23,23 @@ public class TopicsController {
 
     private final ITopicService _service;
 
+    /**
+     * Constructs a new {@code TopicsController} with the given service dependency.
+     *
+     * @param service the topic service used to interact with topic data
+     */
     public TopicsController(ITopicService service) {
         _service = service;
     }
 
     /**
-     * Retrieves all quiz topics.
+     * Handles GET requests to retrieve all quiz topics.
      *
-     * @return a list of {@link TopicResponse} wrapped in {@link APIResponse}
+     * @return a {@link ResponseEntity} containing an {@link APIResponse}
+     *         with a list of {@link TopicResponse} objects
      */
     @GetMapping
-    public ResponseEntity<APIResponse<List<TopicResponse>>> getTopics() {
+    public ResponseEntity<APIResponse<List<TopicResponse>>> get() {
         List<TopicResponse> topics = _service.get();
         APIResponse<List<TopicResponse>> response = new APIResponse<>();
         response.setData(topics);
