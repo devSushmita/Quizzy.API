@@ -35,17 +35,17 @@ public class TopicRepository implements ITopicRepository {
 
             if (firstResultSet instanceof List<?> firstList && !firstList.isEmpty()) {
                 @SuppressWarnings("unchecked")
-                List<List<Object>> rows = (List<List<Object>>) firstResultSet;
+                List<Object[]> rows = (List<Object[]>) firstResultSet;
 
                 for (int i = 0; i < rows.size(); i++) {
                     var record = rows.get(i);
                     Topic topic = new Topic();
-                    topic.setId((Integer) record.get(0));
-                    topic.setName((String) record.get(1));
-                    topic.setCreatedAt((Timestamp) record.get(2));
-                    //topic.setUpdatedAt((Timestamp) row.get(3));
-                    topic.setCreatedBy((Integer) record.get(4));
-                    //topic.setUpdatedBy((Integer) row.get(5));
+                    topic.setId((Integer) record[0]);
+                    topic.setName((String) record[1]);
+                    topic.setCreatedAt((Timestamp) record[2]);
+                    topic.setUpdatedAt((Timestamp) record[3]);
+                    topic.setCreatedBy((Integer) record[4]);
+                    topic.setUpdatedBy((Integer) record[5]);
                     topics.add(topic);
                 }
             }
@@ -53,6 +53,4 @@ public class TopicRepository implements ITopicRepository {
 
         return topics;
     }
-
-
 }
