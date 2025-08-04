@@ -5,27 +5,41 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 /**
- * Represents a quiz topic within the Quizzy application.
- * Contains metadata such as name, creation and update timestamps, and user references.
+ * Represents a quiz topic entity.
+ * <p>
+ * Contains metadata such as creation and update timestamps,
+ * along with user IDs responsible for those actions.
  */
 @Data
 public class Topic {
 
-    /** Unique identifier for the topic. */
+    /**
+     * The unique identifier of the topic.
+     */
     private Integer id;
 
-    /** Name or title of the topic. */
+    /**
+     * The name of the topic.
+     */
     private String name;
 
-    /** Timestamp when the topic was created. */
+    /**
+     * The timestamp when the topic was created.
+     */
     private Timestamp createdAt;
 
-    /** Timestamp when the topic was last updated. */
+    /**
+     * The timestamp when the topic was last updated.
+     */
     private Timestamp updatedAt;
 
-    /** ID of the user who created the topic. */
+    /**
+     * The user ID of the creator.
+     */
     private Integer createdBy;
 
-    /** ID of the user who last updated the topic. */
+    /**
+     * The user ID of the last person who updated the topic.
+     */
     private Integer updatedBy;
 }

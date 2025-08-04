@@ -4,14 +4,24 @@ import com.innobyteservices.quizzy.api.entities.Topic;
 import java.util.List;
 
 /**
- * Repository interface for accessing and managing Topic entities.
+ * Defines data access operations for {@link Topic} entities.
+ * <p>
+ * Provides methods to add and retrieve topics from the underlying data store.
  */
 public interface ITopicRepository {
 
     /**
-     * Retrieves all topics from the data source.
+     * Adds a new topic to the data store.
      *
-     * @return a list of all {@link Topic} entities.
+     * @param topic the topic entity to persist
+     * @return the generated topic ID if successful; {@code null} otherwise
+     */
+    Integer add(Topic topic);
+
+    /**
+     * Retrieves all topics from the data store.
+     *
+     * @return a list of {@link Topic} entities
      */
     List<Topic> get();
 }

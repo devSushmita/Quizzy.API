@@ -5,6 +5,7 @@ import com.innobyteservices.quizzy.api.dto.response.APIResponse;
 import com.innobyteservices.quizzy.api.dto.response.ErrorResponse;
 import com.innobyteservices.quizzy.api.enums.ErrorCode;
 import com.innobyteservices.quizzy.api.exceptions.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<APIResponse<Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<APIResponse<Object>> handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error -> {
@@ -49,6 +50,8 @@ public class GlobalExceptionHandler {
         if (firstEntryOpt.isPresent()) {
             String field = firstEntryOpt.get().getKey().toLowerCase();
             String strErrorCode = firstEntryOpt.get().getValue().toLowerCase();
+            String requestURI = request.getRequestURI();
+            String requestMethod = request.getMethod();
 
             switch (field) {
                 case "firstname" -> {
@@ -77,6 +80,14 @@ public class GlobalExceptionHandler {
                     else {
                         errorCode = ErrorCode.PASSWORD_REQUIRED;
                         message = ErrorMessage.ERR_PASSWORD_REQUIRED;
+                    }
+                }
+                case "name" -> {
+                    if(requestMethod.equals("POST")) {
+                        if (requestURI.equals("/api/topics")) {
+                            errorCode = ErrorCode.TOPIC_NAME_REQUIRED;
+                            message = ErrorMessage.ERR_TOPIC_NAME_REQUIRED;
+                        }
                     }
                 }
             }
