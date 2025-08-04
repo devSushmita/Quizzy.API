@@ -13,4 +13,9 @@ public class TopicCreationResponse {
      * The unique identifier of the newly created topic.
      */
     private Integer id;
+
+    /**
+     * The name of the newly created topic.
+     */
+    private String name;
 }

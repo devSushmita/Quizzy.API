@@ -59,6 +59,7 @@ public class TopicService implements ITopicService {
         if (topicId != null) {
             TopicCreationResponse response = new TopicCreationResponse();
             response.setId(topicId);
+            response.setName(request.getName());
             return response;
         } else {
             throw new TopicAlreadyExistsException();

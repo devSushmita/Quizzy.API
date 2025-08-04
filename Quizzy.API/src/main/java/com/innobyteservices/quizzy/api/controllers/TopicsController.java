@@ -59,6 +59,7 @@ public class TopicsController {
      *
      * @return API response containing the list of topics
      */
+    @RequirePermission(role = AccessRole.User)
     @GetMapping
     public ResponseEntity<APIResponse<List<TopicResponse>>> get() {
         List<TopicResponse> topics = _service.get();
