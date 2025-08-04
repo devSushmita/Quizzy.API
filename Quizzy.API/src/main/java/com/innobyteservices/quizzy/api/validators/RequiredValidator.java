@@ -53,6 +53,9 @@ public class RequiredValidator implements ConstraintValidator<Required, Object> 
                 case "password":
                     message = String.valueOf(ErrorCode.PASSWORD_REQUIRED.getCode());
                     break;
+                case "topic_name":
+                    message = String.valueOf(ErrorCode.TOPIC_NAME_REQUIRED.getCode());
+                    break;
             }
 
             context.buildConstraintViolationWithTemplate(message)

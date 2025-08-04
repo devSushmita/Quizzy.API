@@ -51,6 +51,12 @@ public abstract class ErrorMessage {
     /** Error message when a required claim is not found. */
     public static final String ERR_CLAIM_NOT_FOUND = "Claim not found.";
 
+    /** Error message when a topic with the same name already exists. */
+    public static final String ERR_TOPIC_ALREADY_EXISTS = "Topic with the same name already exists.";
+
+    /** Error message when the topic name is missing during topic creation. */
+    public static final String ERR_TOPIC_NAME_REQUIRED = "Topic name is required.";
+
     /**
      * Private constructor to prevent instantiation.
      */

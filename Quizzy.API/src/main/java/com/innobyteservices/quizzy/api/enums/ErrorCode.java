@@ -55,7 +55,11 @@ public enum ErrorCode {
 
     USER_LOGIN_FAILED(1108),
 
-    CLAIM_NOT_FOUND(1109);
+    CLAIM_NOT_FOUND(1109),
+
+    TOPIC_ALREADY_EXISTS(1110),
+
+    TOPIC_NAME_REQUIRED(1111);
 
     /**
      * Numeric representation of the error code.

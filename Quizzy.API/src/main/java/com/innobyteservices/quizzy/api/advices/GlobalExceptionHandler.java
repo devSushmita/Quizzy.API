@@ -79,6 +79,10 @@ public class GlobalExceptionHandler {
                         message = ErrorMessage.ERR_PASSWORD_REQUIRED;
                     }
                 }
+                case "topic_name" -> {
+                    errorCode = ErrorCode.TOPIC_NAME_REQUIRED;
+                    message = ErrorMessage.ERR_TOPIC_NAME_REQUIRED;
+                }
             }
         }
 
