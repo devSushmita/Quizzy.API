@@ -10,12 +10,17 @@ import java.util.Optional;
 public enum ErrorCode {
 
     /**
-     * Generic error for internal server error.
+     * Error indicating unauthorized access to a protected resource.
+     */
+    UNAUTHORIZED_ACCESS(401),
+
+    /**
+     * Generic error for internal server failures.
      */
     INTERNAL_SERVER_ERROR(500),
 
     /**
-     * Generic error indicating the request is invalid.
+     * Error indicating that the request is invalid or malformed.
      */
     INVALID_REQUEST(1000),
 
@@ -49,16 +54,34 @@ public enum ErrorCode {
      */
     STRONG_PASSWORD_REQUIRED(1105),
 
+    /**
+     * Generic error indicating that the user sign-up process failed.
+     */
     SIGN_UP_FAILED(1106),
 
+    /**
+     * Error indicating that a user with the given email already exists.
+     */
     USER_ALREADY_EXISTS(1107),
 
+    /**
+     * Error indicating that the user login attempt failed.
+     */
     USER_LOGIN_FAILED(1108),
 
+    /**
+     * Error indicating that a required token claim was not found.
+     */
     CLAIM_NOT_FOUND(1109),
 
+    /**
+     * Error indicating that a topic with the same name already exists.
+     */
     TOPIC_ALREADY_EXISTS(1110),
 
+    /**
+     * Error indicating that the topic name is required.
+     */
     TOPIC_NAME_REQUIRED(1111);
 
     /**

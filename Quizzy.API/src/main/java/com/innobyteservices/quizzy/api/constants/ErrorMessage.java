@@ -57,6 +57,24 @@ public abstract class ErrorMessage {
     /** Error message when the topic name is missing during topic creation. */
     public static final String ERR_TOPIC_NAME_REQUIRED = "Topic name is required.";
 
+    /** Error message used when a user attempts to access a resource without proper authorization. */
+    public static final String ERR_UNAUTHORIZED_ACCESS = "Unauthorized access to the resource is restricted.";
+
+    /** Error message for missing or invalid Authorization header in the request. */
+    public static final String ERR_MISSING_OR_INVALID_AUTH_HEADER = "Missing or invalid Authorization header";
+
+    /** Error message for expired token. */
+    public static final String ERR_TOKEN_EXPIRED = "Token has expired";
+
+    /** Error message when the Role claim is not present in the token. */
+    public static final String ERR_ROLE_CLAIM_MISSING = "Role claim is missing in token";
+
+    /** Error message when the Role claim in the token contains an invalid value. */
+    public static final String ERR_INVALID_ROLE_VALUE = "Invalid role value in token";
+
+    /** Error message when the user's role is not sufficient for the requested operation. */
+    public static final String ERR_INSUFFICIENT_PERMISSIONS = "Insufficient permissions";
+
     /**
      * Private constructor to prevent instantiation.
      */

@@ -13,9 +13,9 @@ public enum AccessRole {
     None(0),
 
     /**
-     * Administrator role with the highest level of access.
+     * Admin role with the highest level of access.
      */
-    Administrator(1),
+    Admin(1),
 
     /**
      * Regular user role with limited access.

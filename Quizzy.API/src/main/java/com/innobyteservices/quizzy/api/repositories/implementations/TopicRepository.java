@@ -34,12 +34,7 @@ public class TopicRepository implements ITopicRepository {
     }
 
     /**
-     * Adds a new topic by executing the {@code usp_create_topic} stored procedure.
-     * <p>
-     * Accepts topic name and creator ID as input parameters, and returns the generated topic ID.
-     *
-     * @param topic the topic entity containing creation details
-     * @return the generated topic ID, or {@code null} if creation fails or output is invalid
+     * {@inheritDoc}
      */
     @Override
     public Integer add(Topic topic) {
