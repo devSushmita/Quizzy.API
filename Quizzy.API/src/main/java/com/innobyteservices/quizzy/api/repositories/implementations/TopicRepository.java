@@ -8,6 +8,8 @@ import com.innobyteservices.quizzy.api.repositories.interfaces.ITopicRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.*;
 
 /**
@@ -15,6 +17,13 @@ import java.util.*;
  * <p>
  * This class interacts with the database using stored procedures and utilizes
  * a base repository to execute the requests. It also uses {@link ModelMapper} for potential mappings.
+
+/**
+ * Repository implementation for managing quiz topic data.
+ * <p>
+ * Executes stored procedures to retrieve topic information from the database
+ * and maps the result into {@link Topic} entities.
+ * </p>
  */
 @Repository
 public class TopicRepository implements ITopicRepository {
@@ -69,5 +78,39 @@ public class TopicRepository implements ITopicRepository {
         } else {
             return null;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Topic> get() {
+        StoredProcedureRequest request = new StoredProcedureRequest();
+        request.setName("usp_get_topics");
+
+        StoredProcedureResult result = _base.execute(request);
+        List<List<Object>> resultSets = result.getResultSets();
+        List<Topic> topics = new ArrayList<>();
+
+        if (resultSets != null && !resultSets.isEmpty()) {
+            Object firstResultSet = resultSets.getFirst();
+
+            if (firstResultSet instanceof List<?> firstList && !firstList.isEmpty()) {
+                @SuppressWarnings("unchecked")
+                List<Object[]> rows = (List<Object[]>) firstResultSet;
+
+                for (Object[] record : rows) {
+                    Topic topic = new Topic();
+                    topic.setId((Integer) record[0]);
+                    topic.setName((String) record[1]);
+                    topic.setCreatedAt((Timestamp) record[2]);
+                    topic.setUpdatedAt((Timestamp) record[3]);
+                    topic.setCreatedBy((Integer) record[4]);
+                    topic.setUpdatedBy((Integer) record[5]);
+                    topics.add(topic);
+                }
+            }
+        }
+
+        return topics;
     }
 }
