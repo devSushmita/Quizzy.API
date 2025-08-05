@@ -1,7 +1,5 @@
 package com.innobyteservices.quizzy.api.enums;
 
-import java.util.Optional;
-
 /**
  * Enum representing various error codes used in the Quizzy API.
  *
@@ -75,14 +73,34 @@ public enum ErrorCode {
     CLAIM_NOT_FOUND(1109),
 
     /**
-     * Error indicating that a topic with the same name already exists.
+     * Error indicating that a topic creation fails.
      */
-    TOPIC_ALREADY_EXISTS(1110),
+    TOPIC_CREATION_FAILED(1110),
 
     /**
      * Error indicating that the topic name is required.
      */
-    TOPIC_NAME_REQUIRED(1111);
+    TOPIC_NAME_REQUIRED(1111),
+
+    /**
+     * Error indicating that the quiz name is required.
+     */
+    QUIZ_NAME_REQUIRED(1112),
+
+    /**
+     * Error code indicating that the quiz duration must be greater than zero.
+     */
+    QUIZ_DURATION_SHOULD_BE_GREATER_THAN_ZERO(1113),
+
+    /**
+     * Error code indicating that the total number of quiz questions must be greater than zero.
+     */
+    TOTAL_QUIZ_QUESTIONS_SHOULD_BE_GREATER_THAN_ZERO(1114),
+
+    /**
+     * Error code indicating that the quiz creation fails.
+     */
+    QUIZ_CREATION_FAILED(1115);
 
     /**
      * Numeric representation of the error code.

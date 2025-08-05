@@ -1,17 +1,19 @@
 package com.innobyteservices.quizzy.api.repositories.implementations;
 
+import com.innobyteservices.quizzy.api.entities.Quiz;
 import com.innobyteservices.quizzy.api.internals.StoredProcedureRequest;
+import com.innobyteservices.quizzy.api.internals.StoredProcedureResult;
 import com.innobyteservices.quizzy.api.repositories.interfaces.IBaseRepository;
 import com.innobyteservices.quizzy.api.repositories.interfaces.IQuizRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
  * Repository implementation for quiz-related database operations.
  * <p>
- * This class is responsible for executing quiz-specific stored procedures,
- * such as deleting a quiz from the database.
+ * Handles creation and deletion of quizzes through stored procedures.
  */
 @Repository
 public class QuizRepository implements IQuizRepository {
@@ -23,17 +25,12 @@ public class QuizRepository implements IQuizRepository {
      *
      * @param base the base repository used to execute stored procedures
      */
-    QuizRepository(IBaseRepository base) {
-        _base = base;
+    public QuizRepository(IBaseRepository base) {
+        this._base = base;
     }
 
     /**
      * {@inheritDoc}
-     * <p>
-     * Executes the stored procedure {@code usp_delete_quiz} to delete a quiz
-     * by its ID. Also sets a hardcoded deletedBy user ID (1).
-     *
-     * @param id the unique identifier of the quiz to delete
      */
     @Override
     public void delete(Integer id) {
@@ -51,5 +48,47 @@ public class QuizRepository implements IQuizRepository {
         request.setParameterTypes(parameterTypes);
 
         _base.execute(request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer create(Quiz quiz) {
+        List<Map.Entry<String, Object>> inParams = new ArrayList<>();
+        inParams.add(new AbstractMap.SimpleEntry<>("p_name", quiz.getName()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_topic_id", quiz.getTopicId()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_duration", quiz.getDuration()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_createdBy", quiz.getCreatedBy()));
+        inParams.add(new AbstractMap.SimpleEntry<>("p_total_questions", quiz.getTotalQuestions()));
+
+        ArrayList<String> outParams = new ArrayList<>();
+        outParams.add("p_quiz_id");
+
+        Map<String, Class<?>> parameterTypes = new HashMap<>();
+        parameterTypes.put("p_name", String.class);
+        parameterTypes.put("p_topic_id", Integer.class);
+        parameterTypes.put("p_duration", Integer.class);
+        parameterTypes.put("p_createdBy", Integer.class);
+        parameterTypes.put("p_total_questions", Integer.class);
+        parameterTypes.put("p_quiz_id", Integer.class);
+
+        StoredProcedureRequest request = new StoredProcedureRequest();
+        request.setName("usp_create_quiz");
+        request.setInParameters(inParams);
+        request.setOutParameters(outParams);
+        request.setParameterTypes(parameterTypes);
+
+        StoredProcedureResult result = _base.execute(request);
+        Map<String, Object> output = result.getOutParameters();
+
+        if (output.containsKey("p_quiz_id")) {
+            Object quizId = output.get("p_quiz_id");
+            if (quizId instanceof Number) {
+                return ((Number) quizId).intValue();
+            }
+        }
+
+        return null;
     }
 }

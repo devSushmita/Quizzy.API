@@ -56,6 +56,9 @@ public class RequiredValidator implements ConstraintValidator<Required, Object> 
                 case "topic_name":
                     message = String.valueOf(ErrorCode.TOPIC_NAME_REQUIRED.getCode());
                     break;
+                case "quiz_name":
+                    message = String.valueOf(ErrorCode.QUIZ_NAME_REQUIRED.getCode());
+                    break;
             }
 
             context.buildConstraintViolationWithTemplate(message)
@@ -63,6 +66,22 @@ public class RequiredValidator implements ConstraintValidator<Required, Object> 
 
             return false;
         }
+
+        if (value instanceof Integer itgr && itgr <= 0) {
+            context.disableDefaultConstraintViolation();
+            String message = switch (_field.toLowerCase()) {
+                case "duration" -> String.valueOf(ErrorCode.QUIZ_DURATION_SHOULD_BE_GREATER_THAN_ZERO.getCode());
+                case "total_questions" ->
+                        String.valueOf(ErrorCode.TOTAL_QUIZ_QUESTIONS_SHOULD_BE_GREATER_THAN_ZERO.getCode());
+                default -> null;
+            };
+
+            context.buildConstraintViolationWithTemplate(message)
+                    .addConstraintViolation();
+
+            return false;
+        }
+
 
         return true;
     }
