@@ -5,7 +5,7 @@ import com.innobyteservices.quizzy.api.dto.response.TopicCreationResponse;
 import com.innobyteservices.quizzy.api.dto.response.TopicResponse;
 import com.innobyteservices.quizzy.api.entities.Topic;
 import com.innobyteservices.quizzy.api.exceptions.InvalidRequestException;
-import com.innobyteservices.quizzy.api.exceptions.TopicAlreadyExistsException;
+import com.innobyteservices.quizzy.api.exceptions.TopicCreationFailedException;
 import com.innobyteservices.quizzy.api.internals.CurrentUserContext;
 import com.innobyteservices.quizzy.api.repositories.interfaces.ITopicRepository;
 import com.innobyteservices.quizzy.api.services.interfaces.ITopicService;
@@ -62,7 +62,7 @@ public class TopicService implements ITopicService {
             response.setName(request.getName());
             return response;
         } else {
-            throw new TopicAlreadyExistsException();
+            throw new TopicCreationFailedException();
         }
     }
 

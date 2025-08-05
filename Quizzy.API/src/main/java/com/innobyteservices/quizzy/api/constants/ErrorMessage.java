@@ -51,8 +51,8 @@ public abstract class ErrorMessage {
     /** Error message when a required claim is not found. */
     public static final String ERR_CLAIM_NOT_FOUND = "Claim not found.";
 
-    /** Error message when a topic with the same name already exists. */
-    public static final String ERR_TOPIC_ALREADY_EXISTS = "Topic with the same name already exists.";
+    /** Error message when a topic creation fails. */
+    public static final String ERR_TOPIC_CREATION_FAILED = "Topic creation failed.";
 
     /** Error message when the topic name is missing during topic creation. */
     public static final String ERR_TOPIC_NAME_REQUIRED = "Topic name is required.";
@@ -74,6 +74,24 @@ public abstract class ErrorMessage {
 
     /** Error message when the user's role is not sufficient for the requested operation. */
     public static final String ERR_INSUFFICIENT_PERMISSIONS = "Insufficient permissions";
+
+    /** Error message when the quiz name is missing during quiz creation. */
+    public static final String ERR_QUIZ_NAME_REQUIRED = "Quiz name is required.";
+
+    /**
+     * Error message indicating that the quiz duration must be greater than zero seconds.
+     */
+    public static final String ERR_QUIZ_DURATION_SHOULD_BE_GREATER_THAN_ZERO = "Quiz duration should be greater than 0 second.";
+
+    /**
+     * Error message indicating that the number of quiz questions must be greater than zero.
+     */
+    public static final String ERR_TOTAL_QUIZ_QUESTIONS_SHOULD_BE_GREATER_THAN_ZERO = "Quiz question count should be greater than zero.";
+
+    /**
+     * Error message indicating the quiz creation fails.
+     */
+    public static final String ERR_QUIZ_CREATION_FAILED = "Quiz creation failed.";
 
     /**
      * Private constructor to prevent instantiation.

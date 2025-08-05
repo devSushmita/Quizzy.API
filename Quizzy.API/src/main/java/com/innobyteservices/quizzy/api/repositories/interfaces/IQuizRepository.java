@@ -3,24 +3,24 @@ package com.innobyteservices.quizzy.api.repositories.interfaces;
 import com.innobyteservices.quizzy.api.entities.Quiz;
 
 /**
- * Interface for quiz-related data access operations.
+ * Defines repository-level operations for managing quiz data.
  * <p>
- * Provides methods to create and delete quizzes.
+ * Supports creation and deletion of quiz entities in the data store.
  */
 public interface IQuizRepository {
 
     /**
-     * Deletes a quiz by its ID.
+     * Removes the quiz associated with the specified ID.
      *
-     * @param id the unique identifier of the quiz to be deleted
+     * @param id the unique ID of the quiz to be removed
      */
     void delete(Integer id);
 
     /**
-     * Creates a new quiz and returns the generated quiz ID.
+     * Persists a new quiz entity and returns its generated ID.
      *
-     * @param quiz the {@link Quiz} entity to be created
-     * @return the generated quiz ID, or {@code null} if creation failed
+     * @param quiz the {@link Quiz} entity to persist
+     * @return the generated quiz ID, or {@code null} if the operation failed
      */
     Integer create(Quiz quiz);
 }

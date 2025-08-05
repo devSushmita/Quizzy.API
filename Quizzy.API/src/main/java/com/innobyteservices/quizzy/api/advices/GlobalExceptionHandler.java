@@ -82,11 +82,23 @@ public class GlobalExceptionHandler {
                         message = ErrorMessage.ERR_PASSWORD_REQUIRED;
                     }
                 }
+                case "duration" -> {
+                    errorCode = ErrorCode.QUIZ_DURATION_SHOULD_BE_GREATER_THAN_ZERO;
+                    message = ErrorMessage.ERR_QUIZ_DURATION_SHOULD_BE_GREATER_THAN_ZERO;
+                }
+                case "totalquestions" -> {
+                    errorCode = ErrorCode.TOTAL_QUIZ_QUESTIONS_SHOULD_BE_GREATER_THAN_ZERO;
+                    message = ErrorMessage.ERR_TOTAL_QUIZ_QUESTIONS_SHOULD_BE_GREATER_THAN_ZERO;
+                }
                 case "name" -> {
                     if(requestMethod.equals("POST")) {
                         if (requestURI.equals("/api/topics")) {
                             errorCode = ErrorCode.TOPIC_NAME_REQUIRED;
                             message = ErrorMessage.ERR_TOPIC_NAME_REQUIRED;
+                        }
+                        if(requestURI.equals("/api/quizzes")) {
+                            errorCode = ErrorCode.QUIZ_NAME_REQUIRED;
+                            message = ErrorMessage.ERR_QUIZ_NAME_REQUIRED;
                         }
                     }
                 }

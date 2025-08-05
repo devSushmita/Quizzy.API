@@ -30,10 +30,7 @@ public class QuizRepository implements IQuizRepository {
     }
 
     /**
-     * Executes the stored procedure {@code usp_delete_quiz} to delete a quiz
-     * by its ID. Sets a hardcoded deletedBy user ID (1).
-     *
-     * @param id the unique identifier of the quiz to delete
+     * {@inheritDoc}
      */
     @Override
     public void delete(Integer id) {
@@ -54,13 +51,7 @@ public class QuizRepository implements IQuizRepository {
     }
 
     /**
-     * Executes the stored procedure {@code usp_create_quiz} to insert a new quiz.
-     * <p>
-     * Accepts quiz details such as name, topic ID, duration, creator, timestamps, and
-     * total number of questions, and returns the generated quiz ID.
-     *
-     * @param quiz the {@link Quiz} entity to create
-     * @return the generated quiz ID, or {@code null} if creation failed
+     * {@inheritDoc}
      */
     @Override
     public Integer create(Quiz quiz) {
@@ -69,28 +60,19 @@ public class QuizRepository implements IQuizRepository {
         inParams.add(new AbstractMap.SimpleEntry<>("p_topic_id", quiz.getTopicId()));
         inParams.add(new AbstractMap.SimpleEntry<>("p_duration", quiz.getDuration()));
         inParams.add(new AbstractMap.SimpleEntry<>("p_createdBy", quiz.getCreatedBy()));
-        inParams.add(new AbstractMap.SimpleEntry<>("p_updatedBy", quiz.getUpdatedBy()));
         inParams.add(new AbstractMap.SimpleEntry<>("p_total_questions", quiz.getTotalQuestions()));
-        inParams.add(new AbstractMap.SimpleEntry<>("p_createdAt", quiz.getCreatedAt()));
-        inParams.add(new AbstractMap.SimpleEntry<>("p_updatedAt", quiz.getUpdatedAt()));
 
-        // Output parameter
-        List<String> outParams = new ArrayList<>();
+        ArrayList<String> outParams = new ArrayList<>();
         outParams.add("p_quiz_id");
 
-        // Parameter types
         Map<String, Class<?>> parameterTypes = new HashMap<>();
         parameterTypes.put("p_name", String.class);
         parameterTypes.put("p_topic_id", Integer.class);
         parameterTypes.put("p_duration", Integer.class);
         parameterTypes.put("p_createdBy", Integer.class);
-        parameterTypes.put("p_updatedBy", Integer.class);
         parameterTypes.put("p_total_questions", Integer.class);
-        parameterTypes.put("p_createdAt", Timestamp.class);
-        parameterTypes.put("p_updatedAt", Timestamp.class);
         parameterTypes.put("p_quiz_id", Integer.class);
 
-        // Prepare and execute request
         StoredProcedureRequest request = new StoredProcedureRequest();
         request.setName("usp_create_quiz");
         request.setInParameters(inParams);
