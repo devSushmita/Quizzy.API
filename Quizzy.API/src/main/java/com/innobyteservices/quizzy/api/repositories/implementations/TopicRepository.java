@@ -1,6 +1,7 @@
 package com.innobyteservices.quizzy.api.repositories.implementations;
 
 import com.innobyteservices.quizzy.api.entities.Topic;
+import com.innobyteservices.quizzy.api.internals.FunctionRequest;
 import com.innobyteservices.quizzy.api.internals.StoredProcedureRequest;
 import com.innobyteservices.quizzy.api.internals.StoredProcedureResult;
 import com.innobyteservices.quizzy.api.repositories.interfaces.IBaseRepository;
@@ -112,5 +113,19 @@ public class TopicRepository implements ITopicRepository {
         }
 
         return topics;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean exists(String name) {
+        FunctionRequest<Boolean> request = new FunctionRequest<>();
+        List<Object> parameters = new ArrayList<>();
+        parameters.add(name);
+        request.setName("ufn_does_topic_exist");
+        request.setParameters(parameters);
+        request.setType(Boolean.class);
+        return _base.execute(request);
     }
 }

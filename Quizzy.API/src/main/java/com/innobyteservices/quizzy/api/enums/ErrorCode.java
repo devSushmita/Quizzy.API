@@ -100,7 +100,12 @@ public enum ErrorCode {
     /**
      * Error code indicating that the quiz creation fails.
      */
-    QUIZ_CREATION_FAILED(1115);
+    QUIZ_CREATION_FAILED(1115),
+
+    /**
+     * Error code for when a topic with the same name already exists.
+     */
+    TOPIC_ALREADY_EXISTS(1116);
 
     /**
      * Numeric representation of the error code.

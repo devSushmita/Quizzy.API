@@ -5,6 +5,7 @@ import com.innobyteservices.quizzy.api.dto.response.TopicCreationResponse;
 import com.innobyteservices.quizzy.api.dto.response.TopicResponse;
 import com.innobyteservices.quizzy.api.entities.Topic;
 import com.innobyteservices.quizzy.api.exceptions.InvalidRequestException;
+import com.innobyteservices.quizzy.api.exceptions.TopicAlreadyExistsException;
 import com.innobyteservices.quizzy.api.exceptions.TopicCreationFailedException;
 import com.innobyteservices.quizzy.api.internals.CurrentUserContext;
 import com.innobyteservices.quizzy.api.repositories.interfaces.ITopicRepository;
@@ -49,6 +50,11 @@ public class TopicService implements ITopicService {
     public TopicCreationResponse add(TopicCreationRequest request) {
         if (request == null) {
             throw new InvalidRequestException();
+        }
+
+        Boolean doesExist = _repository.exists(request.getName());
+        if (doesExist) {
+            throw new TopicAlreadyExistsException();
         }
 
         Topic newTopic = new Topic();

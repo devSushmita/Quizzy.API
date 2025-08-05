@@ -94,6 +94,11 @@ public abstract class ErrorMessage {
     public static final String ERR_QUIZ_CREATION_FAILED = "Quiz creation failed.";
 
     /**
+     * Error message indicating a topic with the same name already exists.
+     */
+    public static final String ERR_TOPIC_ALREADY_EXISTS = "Topic with the same name already exists.";
+
+    /**
      * Private constructor to prevent instantiation.
      */
     private ErrorMessage() {

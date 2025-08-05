@@ -24,4 +24,12 @@ public interface ITopicRepository {
      * @return a list of {@link Topic} entities
      */
     List<Topic> get();
+
+    /**
+     * Checks if a topic with the given name exists.
+     *
+     * @param name the name of the topic to check
+     * @return {@code true} if the topic exists, {@code false} otherwise
+     */
+    Boolean exists(String name);
 }
