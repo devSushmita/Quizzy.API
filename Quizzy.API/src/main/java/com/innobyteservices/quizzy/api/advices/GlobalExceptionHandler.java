@@ -128,23 +128,27 @@ public class GlobalExceptionHandler {
         HttpStatus status = null;
 
         if (ex instanceof APIException apiEx) {
-            if (ex instanceof ClaimNotFoundException) {
-                status = HttpStatus.NOT_FOUND;
-            }
-            else if (
-                    ex instanceof FieldRequiredException ||
-                            ex instanceof InvalidEmailException ||
-                            ex instanceof InvalidRequestException ||
-                            ex instanceof SignUpFailedException ||
-                            ex instanceof StrongPasswordRequiredException
+            if (
+                ex instanceof FieldRequiredException ||
+                ex instanceof InvalidEmailException ||
+                ex instanceof InvalidRequestException ||
+                ex instanceof SignUpFailedException ||
+                ex instanceof StrongPasswordRequiredException
             ) {
                 status = HttpStatus.BAD_REQUEST;
             }
-            else if (ex instanceof LoginFailedException) {
-                status = HttpStatus.UNAUTHORIZED;
-            }
-            else if (ex instanceof UserAlreadyExistsException) {
+            else if (
+                ex instanceof TopicAlreadyExistsException ||
+                ex instanceof UserAlreadyExistsException
+            ) {
                 status = HttpStatus.CONFLICT;
+            }
+            else if (
+                ex instanceof LoginFailedException ||
+                ex instanceof ClaimNotFoundException ||
+                ex instanceof UnauthorizedAccessException
+            ) {
+                status = HttpStatus.UNAUTHORIZED;
             }
             else {
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
