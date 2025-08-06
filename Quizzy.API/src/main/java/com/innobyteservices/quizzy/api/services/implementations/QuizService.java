@@ -1,3 +1,4 @@
+
 package com.innobyteservices.quizzy.api.services.implementations;
 
 import com.innobyteservices.quizzy.api.dto.request.QuizCreationRequest;
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Service;
 /**
  * Implementation of the {@link IQuizService} interface that provides business logic
  * for quiz creation and deletion operations.
- * <p>
- * This service validates input data, maps DTOs to entities, sets metadata,
- * and delegates persistence to the repository layer.
+ *
+ * <p>This service validates input data, maps DTOs to entities, and delegates
+ * persistence operations to the underlying repository layer.</p>
  */
 @Service
 public class QuizService implements IQuizService {
@@ -26,22 +27,19 @@ public class QuizService implements IQuizService {
     private final CurrentUserContext _context;
 
     /**
-     * Constructs a new {@code QuizService} with the required dependencies.
+     * Constructs a new {@code QuizService} with the specified dependencies.
      *
      * @param repository the quiz repository used for database operations
-     * @param mapper     the model mapper used for DTO-to-entity conversions
-     * @param context    the current user context for metadata population
+     * @param mapper     the model mapper used for object mapping
      */
     public QuizService(IQuizRepository repository, ModelMapper mapper, CurrentUserContext context) {
-        this._repository = repository;
-        this._mapper = mapper;
-        this._context = context;
+        _repository = repository;
+        _mapper = mapper;
+        _context = context;
     }
 
     /**
-     * Deletes a quiz by its ID.
-     *
-     * @param id the unique identifier of the quiz to be deleted
+     * {@inheritDoc}
      */
     @Override
     public void delete(Integer id) {
@@ -49,12 +47,7 @@ public class QuizService implements IQuizService {
     }
 
     /**
-     * Creates a new quiz based on the given request data.
-     *
-     * @param request the quiz creation request object containing quiz details
-     * @return the response containing the generated quiz ID
-     * @throws InvalidRequestException     if the request object is null
-     * @throws QuizCreationFailedException if quiz creation fails in the repository
+     * {@inheritDoc}
      */
     @Override
     public QuizCreationResponse create(QuizCreationRequest request) {
@@ -62,10 +55,8 @@ public class QuizService implements IQuizService {
             throw new InvalidRequestException();
         }
 
-
         Quiz quiz = _mapper.map(request, Quiz.class);
         quiz.setCreatedBy(_context.getUserId());
-
         Integer quizId = _repository.create(quiz);
 
         if (quizId != null) {
